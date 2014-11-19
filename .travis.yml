@@ -1,0 +1,17 @@
+language: rust
+
+env:
+  global:
+    - secure: XW8tYCh2rqEuNJ2IEuQs8uxqJEa4WvNsSGak19czCPQnFc9z93ntogEdDCA8lNSSCrAzwdjk15kzb42EhSUBvB+JuT2+Hh2tfKGBxTYwoU5F+qXoc6KkWLwdhARU9v4+HWUgmDGIfuzcoBgZ5N43NM5Ma8ABdHT/K8VJXxJUETg=
+
+script:
+  - cargo build --verbose
+  - cargo test --verbose
+  - cargo doc --verbose && mv target/doc doc
+  - ./check-line-length.sh
+
+after_success:
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && curl http://www.rust-ci.org/artifacts/put?t=$RUSTCI_TOKEN | sh'
+
+branches:
+  only: master
