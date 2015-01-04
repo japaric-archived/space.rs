@@ -1,7 +1,7 @@
 //! Iterator-based `linspace` and `logspace` functions
 
 #![deny(missing_docs, warnings)]
-#![feature(macro_rules, phase)]
+#![feature(associated_types, macro_rules, phase)]
 
 #[cfg(test)]
 extern crate quickcheck;
@@ -9,13 +9,13 @@ extern crate quickcheck;
 #[phase(plugin)]
 extern crate quickcheck_macros;
 
-use std::num::{Float, mod};
+use std::num::{Float, self};
 
 #[cfg(test)]
 mod test;
 
 /// Iterator that yields equally spaced numbers in the linear scale
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Linspace<T: Float> {
     start: T,
     state: uint,
@@ -23,7 +23,7 @@ pub struct Linspace<T: Float> {
     stop: uint,
 }
 
-impl<T> DoubleEndedIterator<T> for Linspace<T> where T: Float {
+impl<T> DoubleEndedIterator for Linspace<T> where T: Float {
     fn next_back(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
@@ -34,7 +34,9 @@ impl<T> DoubleEndedIterator<T> for Linspace<T> where T: Float {
     }
 }
 
-impl<T> Iterator<T> for Linspace<T> where T: Float {
+impl<T> Iterator for Linspace<T> where T: Float {
+    type Item = T;
+
     fn next(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
@@ -52,7 +54,7 @@ impl<T> Iterator<T> for Linspace<T> where T: Float {
 }
 
 /// Iterator that yields equally spaced numbers in the logarithmic scale
-#[deriving(Copy)]
+#[derive(Copy)]
 pub struct Logspace<T: Float> {
     start: T,
     state: uint,
@@ -60,7 +62,7 @@ pub struct Logspace<T: Float> {
     stop: uint,
 }
 
-impl<T> DoubleEndedIterator<T> for Logspace<T> where T: Float {
+impl<T> DoubleEndedIterator for Logspace<T> where T: Float {
     fn next_back(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
@@ -71,7 +73,9 @@ impl<T> DoubleEndedIterator<T> for Logspace<T> where T: Float {
     }
 }
 
-impl<T> Iterator<T> for Logspace<T> where T: Float {
+impl<T> Iterator for Logspace<T> where T: Float {
+    type Item = T;
+
     fn next(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
