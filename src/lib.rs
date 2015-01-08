@@ -1,12 +1,12 @@
 //! Iterator-based `linspace` and `logspace` functions
 
 #![deny(missing_docs, warnings)]
-#![feature(associated_types, macro_rules, phase)]
+#![feature(plugin)]
 
 #[cfg(test)]
 extern crate quickcheck;
 #[cfg(test)]
-#[phase(plugin)]
+#[plugin]
 extern crate quickcheck_macros;
 
 use std::num::{Float, self};
