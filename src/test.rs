@@ -37,7 +37,7 @@ macro_rules! float {
 
                     // Check that `linspace(..).rev()` yields evenly spaced numbers
                     #[quickcheck]
-                    fn evenly_spaced(start: $ty, end: $ty, n: uint) -> TestResult {
+                    fn evenly_spaced(start: $ty, end: $ty, n: usize) -> TestResult {
                         use test::IsClose;
 
                         enforce! {
@@ -55,7 +55,7 @@ macro_rules! float {
 
                     // Check that `linspace(..).rev()` produces a monotonically decreasing sequence
                     #[quickcheck]
-                    fn monotonic(start: $ty, end: $ty, n: uint) -> TestResult {
+                    fn monotonic(start: $ty, end: $ty, n: usize) -> TestResult {
                         enforce! {
                             start <= end,
                         }
@@ -67,7 +67,7 @@ macro_rules! float {
 
                     // Check that `linspace(_, _, n).rev()` yields exactly `n` numbers
                     #[quickcheck]
-                    fn size(start: $ty, end: $ty, n: uint) -> TestResult {
+                    fn size(start: $ty, end: $ty, n: usize) -> TestResult {
                         enforce! {
                             start <= end,
                         }
@@ -78,7 +78,7 @@ macro_rules! float {
 
                 // Check that `linspace(..)` yields evenly spaced numbers
                 #[quickcheck]
-                fn evenly_spaced(start: $ty, end: $ty, n: uint) -> TestResult {
+                fn evenly_spaced(start: $ty, end: $ty, n: usize) -> TestResult {
                     use test::IsClose;
 
                     enforce! {
@@ -96,7 +96,7 @@ macro_rules! float {
 
                 // Check that `linspace(..)` produces a monotonic increasing sequence
                 #[quickcheck]
-                fn monotonic(start: $ty, end: $ty, n: uint) -> TestResult {
+                fn monotonic(start: $ty, end: $ty, n: usize) -> TestResult {
                     enforce! {
                         start <= end,
                     }
@@ -108,7 +108,7 @@ macro_rules! float {
 
                 // Check that `linspace(_, _, n)` yields exactly `n` numbers
                 #[quickcheck]
-                fn size(start: $ty, end: $ty, n: uint) -> TestResult {
+                fn size(start: $ty, end: $ty, n: usize) -> TestResult {
                     enforce! {
                         start <= end,
                     }
@@ -125,7 +125,7 @@ macro_rules! float {
 
                     // Check that `logspace(..).rev()` yields evenly spaced numbers
                     #[quickcheck]
-                    fn evenly_spaced(start: $ty, end: $ty, n: uint) -> TestResult {
+                    fn evenly_spaced(start: $ty, end: $ty, n: usize) -> TestResult {
                         use test::IsClose;
 
                         enforce! {
@@ -148,7 +148,7 @@ macro_rules! float {
 
                     // Check that `logspace(..).rev()` produces a monotonically decreasing sequence
                     #[quickcheck]
-                    fn monotonic(start: $ty, end: $ty, n: uint) -> TestResult {
+                    fn monotonic(start: $ty, end: $ty, n: usize) -> TestResult {
                         enforce! {
                             start > 0.,
                             start <= end,
@@ -162,7 +162,7 @@ macro_rules! float {
 
                     // Check that `logspace(_, _, n).rev()` yields exactly `n` numbers
                     #[quickcheck]
-                    fn size(start: $ty, end: $ty, n: uint) -> TestResult {
+                    fn size(start: $ty, end: $ty, n: usize) -> TestResult {
                         enforce! {
                             start > 0.,
                             start <= end,
@@ -174,7 +174,7 @@ macro_rules! float {
 
                 // Check that `logspace(..)` yields evenly spaced numbers
                 #[quickcheck]
-                fn evenly_spaced(start: $ty, end: $ty, n: uint) -> TestResult {
+                fn evenly_spaced(start: $ty, end: $ty, n: usize) -> TestResult {
                     use test::IsClose;
 
                     enforce! {
@@ -197,7 +197,7 @@ macro_rules! float {
 
                 // Check that `logspace(..)` produces a monotonically increasing sequence
                 #[quickcheck]
-                fn monotonic(start: $ty, end: $ty, n: uint) -> TestResult {
+                fn monotonic(start: $ty, end: $ty, n: usize) -> TestResult {
                     enforce! {
                         start > 0.,
                         start <= end,
@@ -210,7 +210,7 @@ macro_rules! float {
 
                 // Check that `logspace(_, _, n)` yields exactly `n` numbers
                 #[quickcheck]
-                fn size(start: $ty, end: $ty, n: uint) -> TestResult {
+                fn size(start: $ty, end: $ty, n: usize) -> TestResult {
                     enforce! {
                         start > 0.,
                         start <= end,

@@ -1,5 +1,6 @@
 //! Iterator-based `linspace` and `logspace` functions
 
+#![allow(unstable)]
 #![deny(missing_docs, warnings)]
 #![feature(plugin)]
 
@@ -18,9 +19,9 @@ mod test;
 #[derive(Copy)]
 pub struct Linspace<T: Float> {
     start: T,
-    state: uint,
+    state: usize,
     step: T,
-    stop: uint,
+    stop: usize,
 }
 
 impl<T> DoubleEndedIterator for Linspace<T> where T: Float {
@@ -47,7 +48,7 @@ impl<T> Iterator for Linspace<T> where T: Float {
         }
     }
 
-    fn size_hint(&self) -> (uint, Option<uint>) {
+    fn size_hint(&self) -> (usize, Option<usize>) {
         let exact = self.stop - self.state;
         (exact, Some(exact))
     }
@@ -57,9 +58,9 @@ impl<T> Iterator for Linspace<T> where T: Float {
 #[derive(Copy)]
 pub struct Logspace<T: Float> {
     start: T,
-    state: uint,
+    state: usize,
     step: T,
-    stop: uint,
+    stop: usize,
 }
 
 impl<T> DoubleEndedIterator for Logspace<T> where T: Float {
@@ -86,7 +87,7 @@ impl<T> Iterator for Logspace<T> where T: Float {
         }
     }
 
-    fn size_hint(&self) -> (uint, Option<uint>) {
+    fn size_hint(&self) -> (usize, Option<usize>) {
         let exact = self.stop - self.state;
         (exact, Some(exact))
     }
@@ -108,7 +109,7 @@ impl<T> Iterator for Logspace<T> where T: Float {
 /// assert_eq!(vec![2., 2.25, 2.5, 2.75, 3.], linspace(2., 3., 5).collect())
 /// assert_eq!(vec![3., 2.75, 2.5, 2.25, 2.], linspace(2., 3., 5).rev().collect())
 /// ```
-pub fn linspace<T>(start: T, end: T, n: uint) -> Linspace<T> where T: Float {
+pub fn linspace<T>(start: T, end: T, n: usize) -> Linspace<T> where T: Float {
     assert!(start <= end);
 
     let step = if n < 2 {
@@ -142,7 +143,7 @@ pub fn linspace<T>(start: T, end: T, n: uint) -> Linspace<T> where T: Float {
 /// assert_eq!(vec![0.1, 1., 10., 100.], logspace(0.1, 100., 4).collect())
 /// assert_eq!(vec![100., 10., 1., 0.1], logspace(0.1, 100., 4).rev().collect())
 /// ```
-pub fn logspace<T>(start: T, end: T, n: uint) -> Logspace<T> where T: Float {
+pub fn logspace<T>(start: T, end: T, n: usize) -> Logspace<T> where T: Float {
     assert!(start > Float::zero() && end > Float::zero() && start <= end);
 
     let (start, end) = (start.ln(), end.ln());
