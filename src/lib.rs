@@ -1,8 +1,9 @@
 //! Iterator-based `linspace` and `logspace` functions
 
-#![allow(unstable)]
 #![deny(missing_docs, warnings)]
+#![feature(core)]
 #![feature(plugin)]
+#![feature(std_misc)]
 
 #[cfg(test)]
 extern crate quickcheck;
