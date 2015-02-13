@@ -15,7 +15,7 @@ use std::num::Float;
 mod test;
 
 /// Iterator that yields equally spaced numbers in the linear scale
-#[derive(Copy)]
+#[derive(Clone)]
 pub struct Linspace<T> where T: cast::Float {
     start: T,
     state: usize,
@@ -54,7 +54,7 @@ impl<T> Iterator for Linspace<T> where T: cast::Float {
 }
 
 /// Iterator that yields equally spaced numbers in the logarithmic scale
-#[derive(Copy)]
+#[derive(Clone)]
 pub struct Logspace<T> where T: cast::Float {
     start: T,
     state: usize,
