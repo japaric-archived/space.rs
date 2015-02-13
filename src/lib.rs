@@ -1,49 +1,47 @@
 //! Iterator-based `linspace` and `logspace` functions
 
+#![cfg_attr(test, plugin(quickcheck_macros))]
 #![deny(missing_docs, warnings)]
-#![feature(core)]
 #![feature(plugin)]
-#![feature(std_misc)]
 
 #[cfg(test)]
 extern crate quickcheck;
-#[cfg(test)]
-#[plugin]
-extern crate quickcheck_macros;
+extern crate cast;
 
-use std::num::{Float, self};
+use cast::CastTo;
+use std::num::Float;
 
 #[cfg(test)]
 mod test;
 
 /// Iterator that yields equally spaced numbers in the linear scale
 #[derive(Copy)]
-pub struct Linspace<T: Float> {
+pub struct Linspace<T> where T: cast::Float {
     start: T,
     state: usize,
     step: T,
     stop: usize,
 }
 
-impl<T> DoubleEndedIterator for Linspace<T> where T: Float {
+impl<T> DoubleEndedIterator for Linspace<T> where T: cast::Float {
     fn next_back(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
         } else {
             self.stop -= 1;
-            Some(self.start + self.step * num::cast(self.stop).unwrap())
+            Some(self.start + self.step * self.stop.to::<T>())
         }
     }
 }
 
-impl<T> Iterator for Linspace<T> where T: Float {
+impl<T> Iterator for Linspace<T> where T: cast::Float {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
         } else {
-            let next = self.start + self.step * num::cast(self.state).unwrap();
+            let next = self.start + self.step * self.state.to::<T>();
             self.state += 1;
             Some(next)
         }
@@ -57,32 +55,32 @@ impl<T> Iterator for Linspace<T> where T: Float {
 
 /// Iterator that yields equally spaced numbers in the logarithmic scale
 #[derive(Copy)]
-pub struct Logspace<T: Float> {
+pub struct Logspace<T> where T: cast::Float {
     start: T,
     state: usize,
     step: T,
     stop: usize,
 }
 
-impl<T> DoubleEndedIterator for Logspace<T> where T: Float {
+impl<T> DoubleEndedIterator for Logspace<T> where T: cast::Float {
     fn next_back(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
         } else {
             self.stop -= 1;
-            Some((self.start + self.step * num::cast(self.stop).unwrap()).exp())
+            Some((self.start + self.step * self.stop.to::<T>()).exp())
         }
     }
 }
 
-impl<T> Iterator for Logspace<T> where T: Float {
+impl<T> Iterator for Logspace<T> where T: cast::Float {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
         } else {
-            let next = self.start + self.step * num::cast(self.state).unwrap();
+            let next = self.start + self.step * self.state.to::<T>();
             self.state += 1;
             Some(next.exp())
         }
@@ -107,17 +105,17 @@ impl<T> Iterator for Logspace<T> where T: Float {
 /// difference is within some tolerance)
 ///
 /// ``` ignore
-/// assert_eq!(vec![2., 2.25, 2.5, 2.75, 3.], linspace(2., 3., 5).collect())
-/// assert_eq!(vec![3., 2.75, 2.5, 2.25, 2.], linspace(2., 3., 5).rev().collect())
+/// assert_eq!(vec![2., 2.25, 2.5, 2.75, 3.], linspace(2., 3., 5).collect::<Vec<_>>())
+/// assert_eq!(vec![3., 2.75, 2.5, 2.25, 2.], linspace(2., 3., 5).rev().collect::<Vec<_>>())
 /// ```
-pub fn linspace<T>(start: T, end: T, n: usize) -> Linspace<T> where T: Float {
+pub fn linspace<T>(start: T, end: T, n: usize) -> Linspace<T> where T: cast::Float {
     assert!(start <= end);
 
     let step = if n < 2 {
         // NB The value of `step` doesn't matter in these cases
-        Float::zero()
+        0.to::<T>()
     } else {
-        (end - start) / num::cast(n - 1).unwrap()
+        (end - start) / (n - 1).to::<T>()
     };
 
     Linspace {
@@ -141,19 +139,21 @@ pub fn linspace<T>(start: T, end: T, n: usize) -> Linspace<T> where T: Float {
 /// difference is within some tolerance)
 ///
 /// ``` ignore
-/// assert_eq!(vec![0.1, 1., 10., 100.], logspace(0.1, 100., 4).collect())
-/// assert_eq!(vec![100., 10., 1., 0.1], logspace(0.1, 100., 4).rev().collect())
+/// assert_eq!(vec![0.1, 1., 10., 100.], logspace(0.1, 100., 4).collect::<Vec<_>>())
+/// assert_eq!(vec![100., 10., 1., 0.1], logspace(0.1, 100., 4).rev().collect::<Vec<_>>())
 /// ```
-pub fn logspace<T>(start: T, end: T, n: usize) -> Logspace<T> where T: Float {
-    assert!(start > Float::zero() && end > Float::zero() && start <= end);
+pub fn logspace<T>(start: T, end: T, n: usize) -> Logspace<T> where T: cast::Float {
+    let _0 = 0.to::<T>();
+
+    assert!(start > _0 && end > _0 && start <= end);
 
     let (start, end) = (start.ln(), end.ln());
 
     let step = if n < 2 {
         // NB The value of `step` doesn't matter in these cases
-        Float::zero()
+        _0
     } else {
-        (end - start) / num::cast(n - 1).unwrap()
+        (end - start) / (n - 1).to::<T>()
     };
 
     Logspace {

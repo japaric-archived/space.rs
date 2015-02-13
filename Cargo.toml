@@ -4,6 +4,9 @@ name = "space"
 version = "0.0.0"
 authors = ["Jorge Aparicio <japaricious@gmail.com>"]
 
+[dependencies.cast]
+git = "https://github.com/japaric/cast.rs"
+
 [dev-dependencies.quickcheck]
 git = "https://github.com/burntsushi/quickcheck"
 
