@@ -1,5 +1,6 @@
 //! Iterator-based `linspace` and `logspace` functions
 
+#![cfg_attr(test, allow(trivial_casts))]  // quickcheck
 #![cfg_attr(test, plugin(quickcheck_macros))]
 #![deny(missing_docs, warnings)]
 #![feature(plugin)]
