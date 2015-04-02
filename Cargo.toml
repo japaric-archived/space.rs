@@ -7,6 +7,9 @@ authors = ["Jorge Aparicio <japaricious@gmail.com>"]
 [dependencies.cast]
 git = "https://github.com/japaric/cast.rs"
 
+[dependencies.float]
+git = "https://github.com/japaric/float.rs"
+
 [dev-dependencies.quickcheck]
 git = "https://github.com/burntsushi/quickcheck"
 

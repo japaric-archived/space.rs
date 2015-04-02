@@ -21,8 +21,6 @@ macro_rules! float {
         mod $ty {
             impl ::test::IsClose for $ty {
                 fn is_close(self, rhs: $ty) -> bool {
-                    use std::num::Float;
-
                     const TOL: $ty = 1e-3;
 
                     (self - rhs).abs() < TOL
@@ -135,8 +133,6 @@ macro_rules! float {
 
                         let v = ::logspace(start, end, n).rev().collect::<Vec<_>>();
                         let mut spaces = v.windows(2).map(|w| {
-                            use std::num::Float;
-
                             w[1].ln() - w[0].ln()
                         });
 
@@ -184,8 +180,6 @@ macro_rules! float {
 
                     let v = ::logspace(start, end, n).collect::<Vec<_>>();
                     let mut spaces = v.windows(2).map(|w| {
-                        use std::num::Float;
-
                         w[1].ln() - w[0].ln()
                     });
 
