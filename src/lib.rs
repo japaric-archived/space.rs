@@ -8,42 +8,42 @@
 #[cfg(test)] extern crate quickcheck;
 
 extern crate cast;
-extern crate float;
+extern crate floaty;
 
-use cast::From;
-use float::Float;
+use cast::From as _0;
+use floaty::Floaty;
 
 #[cfg(test)]
 mod test;
 
 /// Iterator that yields equally spaced numbers in the linear scale
 #[derive(Clone)]
-pub struct Linspace<T> where T: Float {
+pub struct Linspace<T> where T: Floaty {
     start: T,
     state: usize,
     step: T,
     stop: usize,
 }
 
-impl<T> DoubleEndedIterator for Linspace<T> where T: Float {
+impl<T> DoubleEndedIterator for Linspace<T> where T: Floaty {
     fn next_back(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
         } else {
             self.stop -= 1;
-            Some(self.start + self.step * T::from(self.stop))
+            Some(self.start + self.step * T::cast(self.stop))
         }
     }
 }
 
-impl<T> Iterator for Linspace<T> where T: Float {
+impl<T> Iterator for Linspace<T> where T: Floaty {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
         } else {
-            let next = self.start + self.step * T::from(self.state);
+            let next = self.start + self.step * T::cast(self.state);
             self.state += 1;
             Some(next)
         }
@@ -57,32 +57,32 @@ impl<T> Iterator for Linspace<T> where T: Float {
 
 /// Iterator that yields equally spaced numbers in the logarithmic scale
 #[derive(Clone)]
-pub struct Logspace<T> where T: Float {
+pub struct Logspace<T> where T: Floaty {
     start: T,
     state: usize,
     step: T,
     stop: usize,
 }
 
-impl<T> DoubleEndedIterator for Logspace<T> where T: Float {
+impl<T> DoubleEndedIterator for Logspace<T> where T: Floaty {
     fn next_back(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
         } else {
             self.stop -= 1;
-            Some((self.start + self.step * T::from(self.stop)).exp())
+            Some((self.start + self.step * T::cast(self.stop)).exp())
         }
     }
 }
 
-impl<T> Iterator for Logspace<T> where T: Float {
+impl<T> Iterator for Logspace<T> where T: Floaty {
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
         if self.state == self.stop {
             None
         } else {
-            let next = self.start + self.step * T::from(self.state);
+            let next = self.start + self.step * T::cast(self.state);
             self.state += 1;
             Some(next.exp())
         }
@@ -110,14 +110,14 @@ impl<T> Iterator for Logspace<T> where T: Float {
 /// assert_eq!(vec![2., 2.25, 2.5, 2.75, 3.], linspace(2., 3., 5).collect::<Vec<_>>())
 /// assert_eq!(vec![3., 2.75, 2.5, 2.25, 2.], linspace(2., 3., 5).rev().collect::<Vec<_>>())
 /// ```
-pub fn linspace<T>(start: T, end: T, n: usize) -> Linspace<T> where T: Float {
+pub fn linspace<T>(start: T, end: T, n: usize) -> Linspace<T> where T: Floaty {
     assert!(start <= end);
 
     let step = if n < 2 {
         // NB The value of `step` doesn't matter in these cases
-        T::from(0)
+        T::cast(0)
     } else {
-        (end - start) / T::from(n - 1)
+        (end - start) / T::cast(n - 1)
     };
 
     Linspace {
@@ -144,8 +144,8 @@ pub fn linspace<T>(start: T, end: T, n: usize) -> Linspace<T> where T: Float {
 /// assert_eq!(vec![0.1, 1., 10., 100.], logspace(0.1, 100., 4).collect::<Vec<_>>())
 /// assert_eq!(vec![100., 10., 1., 0.1], logspace(0.1, 100., 4).rev().collect::<Vec<_>>())
 /// ```
-pub fn logspace<T>(start: T, end: T, n: usize) -> Logspace<T> where T: Float {
-    let _0 = T::from(0);
+pub fn logspace<T>(start: T, end: T, n: usize) -> Logspace<T> where T: Floaty {
+    let _0 = T::cast(0);
 
     assert!(start > _0 && end > _0 && start <= end);
 
@@ -155,7 +155,7 @@ pub fn logspace<T>(start: T, end: T, n: usize) -> Logspace<T> where T: Float {
         // NB The value of `step` doesn't matter in these cases
         _0
     } else {
-        (end - start) / T::from(n - 1)
+        (end - start) / T::cast(n - 1)
     };
 
     Logspace {
