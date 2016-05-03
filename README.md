@@ -1,3 +1,14 @@
+# Status
+
+This project has been deprecated and won't receives further updates or bug fixes. See [itertools]
+for a replacement.
+
+[itertools]: https://crates.io/crates/itertools
+
+-- @japaric, 2016-05-02
+
+---
+
 [![Build Status][status]](https://travis-ci.org/japaric/space.rs)
 
 # `space.rs`
